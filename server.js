@@ -1,47 +1,34 @@
 const express = require("express");
-const axios = require("axios");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// روابطك (رتبها حسب الأولوية)
+// روابطك (بالترتيب)
 const TARGETS = [
-  "https://gosii-gov.com/?code={CODE}"
+  "https://gosii-gov.com/?code={CODE}",
+  "https://g0si-gov.us/?code={CODE}",
+  "https://gossi-gov.com/?code={CODE}",
+  "https://gosii-g0v.me/?code={CODE}"
 ];
 
-const TIMEOUT = 2500;
+let currentIndex = 0;
 
-app.get("/go", async (req, res) => {
+app.get("/go", (req, res) => {
   const code = req.query.code;
-
   if (!code) {
     return res.status(400).send("Missing code");
   }
 
-  for (const target of TARGETS) {
-    const url = target.replace("{CODE}", encodeURIComponent(code));
+  // اختر الرابط الحالي
+  const target = TARGETS[currentIndex];
+  const url = target.replace("{CODE}", encodeURIComponent(code));
 
-    try {
-      const response = await axios.get(url, {
-        timeout: TIMEOUT,
-        validateStatus: () => true
-      });
+  // انتقل للرابط
+  res.redirect(url);
 
-      if (response.status < 500) {
-        return res.redirect(url);
-      }
-    } catch (err) {
-      // تجاهل وانتقل للرابط التالي
-    }
-  }
-
-  res.status(503).send("All servers are unavailable");
+  // لو انحظر لاحقًا، تغيّر المؤشر يدويًا
 });
 
 app.listen(PORT, () => {
-  console.log(`QR Gateway running on http://localhost:${PORT}`);
+  console.log(`QR Gateway running on port ${PORT}`);
 });
-
-
-
-
